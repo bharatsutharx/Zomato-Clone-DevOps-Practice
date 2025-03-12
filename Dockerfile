@@ -27,5 +27,4 @@
     
     # Start Nginx
     CMD ["nginx", "-g", "daemon off;"]
-
     
