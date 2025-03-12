@@ -1,0 +1,16 @@
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "8080:8080"  # Jenkins UI
+      - "50000:50000" # For agent connections
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    environment:
+      - JENKINS_USER=admin
+      - JENKINS_PASS=admin123
+
+volumes:
+  jenkins_home:

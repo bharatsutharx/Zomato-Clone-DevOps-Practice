@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+
+    environment {
+        SONARQUBE_URL = 'http://localhost:9000'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/your-repo.git'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh 'sonar-scanner -Dsonar.projectKey=Reac-App -Dsonar.sources=.'
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                script {
+                    timeout(time: 1, unit: 'MINUTES') {
+                        waitForQualityGate abortPipeline: true
+                    }
+                }
+            }
+        }
+    }
+}
+
+    post {
+        failure {
+            script {
+                sh """
+                    curl -X POST -H 'Content-type: application/json' \
+                    --data '{"text":"🚨 Jenkins Pipeline Failed! Check logs for details."}' \
+                    https://hooks.slack.com/services/your-slack-webhook-url
+                """
+            }
+        }
+    }
