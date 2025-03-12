@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE_URL = 'http://localhost:9000'
+        SONAR_HOME = tool 'sonar-scanner'
     }
 
     stages {
@@ -14,8 +14,8 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh 'sonar-scanner -Dsonar.projectKey=Reac-App -Dsonar.sources=.'
+                withSonarQubeEnv('sonar-server') {
+                    sh '$SONAR_HOME/bin/sonar-scanner -Dsonar.projectKey=Reac-App -Dsonar.sources=.'
                 }
             }
         }
