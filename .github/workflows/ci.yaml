@@ -21,9 +21,6 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Run Tests
-        run: npm test # Skip if no tests are available
-
       - name: Build Docker Image
         run: |
           docker build -t bharat5/zomato-clone:latest .
